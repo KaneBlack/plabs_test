@@ -7,7 +7,9 @@
       {% render 'product-thumbnail-gallery' %}
     </div>
     <div class="info-side">
-      {% render 'product-info' %}
+      {% render 'product-info'
+        , block: block
+        , product: product %}
     </div>
   </div>
 </section>

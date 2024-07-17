@@ -1,0 +1,68 @@
+<div class="product-info">
+  {% for block in section.blocks %}
+    {% case block.type %}
+      {% when "sku" %}
+        <p class="product-sku">{{- product.selected_or_first_available_variant.sku | prepend: "Cód: " -}}</p>
+      {% when "title" %}
+        <h1 class="product-title">{{ product.title | escape }}</h1>
+      {% when "price" %}
+        <div class="product-price">
+          {% if product.compare_at_price > product.price %}
+            {% assign percentage_price = product.compare_at_price_max | minus: product.price | times: 100.0 | divided_by: product.compare_at_price_max | money_without_currency | times: 100 | remove: '.0' %}
+            <s>
+              <span class="compare-price">
+                {{ product.selected_or_first_available_variant.compare_at_price | money }}
+                <span class="price-percentage">({{ percentage_price }}% Off)</span>
+              </span>
+            </s>
+          {% endif %}
+          <span class="current-price">
+            {{ product.selected_or_first_available_variant.price | money }}
+          </span>
+        </div>
+      {% when "variant_picker" %}
+        {% form 'product', product %}
+          <input
+            id="product-id"
+            type="hidden"
+            name="id"
+            value="{{product.selected_or_first_available_variant.id}}">
+          {% if product.variants.size > 1 %}
+            <div class="product-options">
+              {% for option in product.options_with_values %}
+                <div class="product-option">
+                  <p class="product-options-title">{{ option.name }}:
+                    <span>{{ option.selected_value }}</span>
+                  </p>
+                  <ul class="product-option-values">
+                    {% for value in option.values %}
+                      <li class="product-option-value">
+                        <input
+                          {% if option.selected_value == value %}
+                          checked
+                          {% endif %}
+                          type="radio"
+                          name="{{ option.name }}"
+                          value="{{ value }}"
+                          data-swatch-color="{{value.swatch.color}}"
+                          hidden
+                          id="{{ option.name | handleize }}-{{ value| handleize }}">
+                        {% if value.swatch.image %}
+                          <label for="{{ option.name | handleize }}-{{ value| handleize }}">
+                            <img src="{{ value.swatch.image | image_url }}" alt="">
+                          </label>
+                        {% else %}
+                          <label for="{{ option.name | handleize }}-{{ value| handleize }}">{{ value.name }}</label>
+                        {% endif %}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+          <button class="btn add-to-cart">Add to cart</button>
+        {% endform %}
+    {% endcase %}
+  {% endfor %}
+</div>
