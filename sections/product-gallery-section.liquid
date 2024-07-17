@@ -1,0 +1,50 @@
+{{ 'product-gallery-section.css' | asset_url | stylesheet_tag }}
+
+<section class="product-gallery-section">
+  <div class="page-width product-gallery-container">
+    <div class="media-side">
+      {% render 'product-main-gallery' %}
+      {% render 'product-thumbnail-gallery' %}
+    </div>
+    <div class="info-side">
+      {% render 'product-info' %}
+    </div>
+  </div>
+</section>
+
+<script defer="defer">
+    window.ShopifyProductData = {{ product | json }};
+</script>
+<script src="{{ 'product-gallery-section.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+  {
+    "name": "Product gallery",
+    "tag": "section",
+    "class": "section",
+    "blocks": [
+      {
+        "type": "title",
+        "name": "t:sections.main-product.blocks.title.name",
+        "limit": 1
+      }, {
+        "type": "price",
+        "name": "t:sections.main-product.blocks.price.name",
+        "limit": 1
+      }, {
+        "type": "sku",
+        "name": "t:sections.main-product.blocks.sku.name",
+        "limit": 1
+      }, {
+        "type": "variant_picker",
+        "name": "t:sections.main-product.blocks.variant_picker.name",
+        "limit": 1
+      }
+    ],
+    "presets": [
+      {
+        "name": "Product gallery"
+      }
+    ]
+  }
+{% endschema %}
