@@ -8,16 +8,16 @@
       {% when "price" %}
         <div class="product-price">
           {% if product.compare_at_price > product.price %}
+
             {% assign percentage_price = product.compare_at_price_max | minus: product.price | times: 100.0 | divided_by: product.compare_at_price_max | money_without_currency | times: 100 | remove: '.0' %}
-            <s>
-              <span class="compare-price">
-                {{ product.selected_or_first_available_variant.compare_at_price | money }}
+
+            <span class="compare-price">
+                <s>{{ product.selected_or_first_available_variant.compare_at_price | money }}</s>
                 <span class="price-percentage">({{ percentage_price }}% Off)</span>
-              </span>
-            </s>
+            </span>
           {% endif %}
           <span class="current-price">
-            {{ product.selected_or_first_available_variant.price | money }}
+            {{- product.selected_or_first_available_variant.price | money -}}
           </span>
         </div>
       {% when "variant_picker" %}
@@ -30,10 +30,10 @@
           {% if product.variants.size > 1 %}
             <div class="product-options">
               {% for option in product.options_with_values %}
-                <div class="product-option">
-                  <p class="product-options-title">{{ option.name }}:
-                    <span>{{ option.selected_value }}</span>
-                  </p>
+                <div class="product-option-list">
+                  <div class="product-options-title">
+                    {{ option.name }}:<span>{{ option.selected_value }}</span>
+                  </div>
                   <ul class="product-option-values">
                     {% for value in option.values %}
                       <li class="product-option-value">
@@ -48,11 +48,11 @@
                           hidden
                           id="{{ option.name | handleize }}-{{ value| handleize }}">
                         {% if value.swatch.image %}
-                          <label for="{{ option.name | handleize }}-{{ value| handleize }}">
+                        <label for="{{ option.name | handleize }}-{{ value| handleize }}" class="product-option-value__swatch" {% if forloop.first %} style="border-color: {{value.swatch.color}};"{% endif %}>
                             <img src="{{ value.swatch.image | image_url }}" alt="">
                           </label>
                         {% else %}
-                          <label for="{{ option.name | handleize }}-{{ value| handleize }}">{{ value.name }}</label>
+                          <label for="{{ option.name | handleize }}-{{ value| handleize }}"class="product-option-value__pills">{{ value.name }}</label>
                         {% endif %}
                       </li>
                     {% endfor %}

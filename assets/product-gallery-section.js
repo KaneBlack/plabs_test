@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const thumbnailList = document.querySelector(".thumbnail-images");
   const thumbnailItems = document.querySelectorAll(".thumbnail-images li");
   const productOptions = document.querySelectorAll(
-    ".product-option input[type='radio']"
+    ".product-option-list input[type='radio']"
   );
 
   function updateProductDetails(matchedVariant) {
@@ -34,13 +34,33 @@ document.addEventListener("DOMContentLoaded", () => {
         );
       });
 
-      // Check if active item is visible
-      const activeItem = document.querySelector(".thumbnail-item-active");
-      if (activeItem) {
-        const activeRect = activeItem.getBoundingClientRect();
-        const containerRect = thumbnailList.getBoundingClientRect();
+      scrollToActiveItem();
+    }
+  }
 
-        // Scroll to active item if it's not visible
+  function scrollToActiveItem() {
+    const activeItem = document.querySelector(".thumbnail-item-active");
+    if (activeItem) {
+      const activeRect = activeItem.getBoundingClientRect();
+      const containerRect = thumbnailList.getBoundingClientRect();
+
+      // Determine if horizontal or vertical scrolling is needed
+      const isHorizontal = window.innerWidth < 1024; // Adjust the breakpoint as needed
+
+      if (isHorizontal) {
+        // Scroll horizontally
+        if (
+          activeRect.right > containerRect.right ||
+          activeRect.left < containerRect.left
+        ) {
+          thumbnailList.scroll({
+            left:
+              thumbnailList.scrollLeft + activeRect.left - containerRect.left,
+            behavior: "smooth",
+          });
+        }
+      } else {
+        // Scroll vertically
         if (
           activeRect.bottom > containerRect.bottom ||
           activeRect.top < containerRect.top
@@ -75,19 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "src",
         thumbnailItems[nextIndex].querySelector("img").src
       );
-
-      // Scroll to new active item
-      const activeRect = thumbnailItems[nextIndex].getBoundingClientRect();
-      const containerRect = thumbnailList.getBoundingClientRect();
-      if (
-        activeRect.bottom > containerRect.bottom ||
-        activeRect.top < containerRect.top
-      ) {
-        thumbnailList.scroll({
-          top: thumbnailList.scrollTop + activeRect.top - containerRect.top,
-          behavior: "smooth",
-        });
-      }
+      scrollToActiveItem();
     }
   }
 
@@ -112,19 +120,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "src",
         thumbnailItems[prevIndex].querySelector("img").src
       );
-
-      // Scroll to new active item
-      const activeRect = thumbnailItems[prevIndex].getBoundingClientRect();
-      const containerRect = thumbnailList.getBoundingClientRect();
-      if (
-        activeRect.bottom > containerRect.bottom ||
-        activeRect.top < containerRect.top
-      ) {
-        thumbnailList.scroll({
-          top: thumbnailList.scrollTop + activeRect.top - containerRect.top,
-          behavior: "smooth",
-        });
-      }
+      scrollToActiveItem();
     }
   }
 
@@ -153,10 +149,9 @@ document.addEventListener("DOMContentLoaded", () => {
         // Apply or remove data-swatch-color attribute styles to label
         selectedOptions.forEach(({ label, dataAttr, checked }) => {
           if (checked) {
-            console.log(label, dataAttr);
-            label.style.setProperty("background-color", dataAttr); // Apply style based on data-swatch-color
+            label.style.setProperty("border-color", dataAttr); // Apply style based on data-swatch-color
           } else {
-            label.style.removeProperty("background-color"); // Remove style if not checked
+            label.style.removeProperty("border-color"); // Remove style if not checked
           }
         });
       }
@@ -170,6 +165,13 @@ document.addEventListener("DOMContentLoaded", () => {
     .querySelector(".arrow-down")
     .addEventListener("click", showNextImage);
 
+  const favoritar = document.querySelector(".icon-favoritar");
+
+  favoritar.addEventListener("click", (e) => {
+    e.preventDefault;
+    favoritar.classList.toggle("checked");
+  });
+
   thumbnailItems.forEach((item) => {
     item.addEventListener("click", () => {
       if (!item.classList.contains("hide")) {
@@ -178,6 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
           .classList.remove("thumbnail-item-active");
         item.classList.add("thumbnail-item-active");
         productImage.setAttribute("src", item.querySelector("img").src);
+        scrollToActiveItem();
       }
     });
   });

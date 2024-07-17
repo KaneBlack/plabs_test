@@ -1,5 +1,6 @@
 <div class="main-gallery">
   <div class="gallery-container">
+    <button class="icon-favoritar">{% render "icon-favoritar" %}</button>
     {% if product.selected_or_first_available_variant.featured_image %}
       {% assign featured = product.selected_or_first_available_variant.featured_image %}
       <img
