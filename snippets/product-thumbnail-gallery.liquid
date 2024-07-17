@@ -1,6 +1,11 @@
 <div class="thumbnail-container">
-  <div class="arrow arrow-up">&uarr; prev</div>
+  <div class="arrow arrow-up">{% render "icon-arrow-up" %}</div>
   <ul class="thumbnail-images">
+    {% if product.selected_or_first_available_variant.featured_image %}
+        {% assign featured = product.selected_or_first_available_variant.featured_image %}
+    {% else %}
+        {% assign featured = product.featured_image %}
+    {% endif %}
     {% for image in product.images %}
       <li class="thumbnail-item {% if image == featured %}thumbnail-item-active{% endif %}" data-alt="{{ image.alt }}">
         <img
@@ -10,5 +15,5 @@
       </li>
     {% endfor %}
   </ul>
-  <div class="arrow arrow-down">&darr; next</div>
+  <div class="arrow arrow-down">{% render "icon-arrow-down" %}</div>
 </div>
