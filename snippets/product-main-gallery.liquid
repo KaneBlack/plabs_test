@@ -1,0 +1,19 @@
+<div class="main-gallery">
+  <div class="gallery-container">
+    {% if product.selected_or_first_available_variant.featured_image %}
+      {% assign featured = product.selected_or_first_available_variant.featured_image %}
+      <img
+        src="{{ featured | image_url }}"
+        id="product-image"
+        class="product-main-image"
+        alt="">
+    {% else %}
+      {% assign featured = product.featured_image %}
+      <img
+        src="{{ featured | image_url }}"
+        id="product-image"
+        class="product-main-image"
+        alt="">
+    {% endif %}
+  </div>
+</div>

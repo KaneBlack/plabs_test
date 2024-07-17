@@ -3,7 +3,8 @@
 <section class="product-gallery-section">
   <div class="page-width product-gallery-container">
     <div class="media-side">
-      {% render 'product-main-gallery' %}
+      {% render 'product-main-gallery'
+        , product: product %}
       {% render 'product-thumbnail-gallery'
         , product: product %}
     </div>
