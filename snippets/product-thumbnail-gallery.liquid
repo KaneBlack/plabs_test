@@ -1,0 +1,14 @@
+<div class="thumbnail-container">
+  <div class="arrow arrow-up">&uarr; prev</div>
+  <ul class="thumbnail-images">
+    {% for image in product.images %}
+      <li class="thumbnail-item {% if image == featured %}thumbnail-item-active{% endif %}" data-alt="{{ image.alt }}">
+        <img
+          src="{{ image.src | image_url }}"
+          class="thumbnail-image"
+          alt="{{ image.alt }}">
+      </li>
+    {% endfor %}
+  </ul>
+  <div class="arrow arrow-down">&darr; next</div>
+</div>
